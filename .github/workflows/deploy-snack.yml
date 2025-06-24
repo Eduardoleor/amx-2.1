@@ -1,0 +1,33 @@
+name: Deploy to Snack
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy to Snack
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          SNACK_ID: ${{ secrets.SNACK_ID }}
+        run: |
+          npx -y @expo/snack-content-cli@latest push \
+            --path ./ \
+            --snack-id $SNACK_ID \
+            --expo-token $EXPO_TOKEN \
+            --ignore "**/node_modules/**" \
+            --ignore ".git/**" \
+            --ignore ".github/**"
