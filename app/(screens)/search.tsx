@@ -24,7 +24,7 @@ export default function SearchScreen() {
       }
       setSearchCriteria(null)
     }
-  }, [data])
+  }, [data, router, searchCriteria?.number])
 
   const handleSearch = (criteria: FlightSearchCriteria) => {
     if (criteria.number || (criteria.origin && criteria.destination)) {

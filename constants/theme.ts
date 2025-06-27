@@ -24,3 +24,32 @@ export const colors = {
     tabIconSelected: tintColorDark,
   },
 }
+
+export const theme = {
+  colors: {
+    primary: '#3498db',
+    secondary: '#2c3e50',
+    success: '#2ecc71',
+    danger: '#e74c3c',
+    warning: '#f39c12',
+    info: '#3498db',
+    background: '#f8f9fa',
+    cardBackground: '#ffffff',
+    textPrimary: '#2c3e50',
+    textSecondary: '#7f8c8d',
+    border: '#e0e0e0',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+  borderRadius: {
+    sm: 4,
+    md: 8,
+    lg: 16,
+    circle: 100,
+  },
+}
