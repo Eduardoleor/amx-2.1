@@ -1,22 +1,25 @@
-import useResponsiveStyles from '@/hooks/useResponsiveStyles'
 import React, { useState } from 'react'
-import { TextInput, TouchableOpacity } from 'react-native'
-import styled from 'styled-components/native'
+import styled, { useTheme } from 'styled-components/native'
+import Button from '@/components/ui/Button'
+import Input from '@/components/ui/Input'
+import { FlightSearchCriteria } from '@/types'
 
 interface SearchFormProps {
-  onSubmit: (criteria: { origin: string; destination: string; number: string }) => void
+  onSubmit: (criteria: FlightSearchCriteria) => void
 }
 
-const SearchForm = ({ onSubmit }: SearchFormProps) => {
-  const rs = useResponsiveStyles()
-  const [criteria, setCriteria] = useState({
+const SearchForm: React.FC<SearchFormProps> = ({ onSubmit }) => {
+  const theme = useTheme()
+  const [criteria, setCriteria] = useState<FlightSearchCriteria>({
     origin: '',
     destination: '',
     number: '',
   })
 
-  const handleSubmit = () => {
-    onSubmit(criteria)
+  const handleSearch = () => {
+    if (criteria.number || (criteria.origin && criteria.destination)) {
+      onSubmit(criteria)
+    }
   }
 
   return (
@@ -24,7 +27,7 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
       <Input
         label="Número de Vuelo"
         placeholder="Ej: AM500"
-        value={criteria.number}
+        value={criteria.number || ''}
         onChangeText={(text) => setCriteria({ ...criteria, number: text })}
       />
 
@@ -33,7 +36,7 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
       <Input
         label="Origen (Código)"
         placeholder="Ej: MEX"
-        value={criteria.origin}
+        value={criteria.origin || ''}
         onChangeText={(text) => setCriteria({ ...criteria, origin: text.toUpperCase() })}
         maxLength={3}
       />
@@ -41,58 +44,25 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
       <Input
         label="Destino (Código)"
         placeholder="Ej: CUN"
-        value={criteria.destination}
+        value={criteria.destination || ''}
         onChangeText={(text) => setCriteria({ ...criteria, destination: text.toUpperCase() })}
         maxLength={3}
       />
 
       <Button
         title="Buscar Vuelos"
-        onPress={handleSubmit}
+        onPress={handleSearch}
         disabled={!criteria.number && (!criteria.origin || !criteria.destination)}
       />
     </FormContainer>
   )
 }
 
-// Custom Input Component
-interface InputProps {
-  label: string
-  value: string
-  onChangeText: (text: string) => void
-  placeholder?: string
-  maxLength?: number
-}
-
-const Input = ({ label, ...props }: InputProps) => {
-  return (
-    <InputContainer>
-      <InputLabel>{label}</InputLabel>
-      <StyledTextInput {...props} />
-    </InputContainer>
-  )
-}
-
-// Custom Button Component
-interface ButtonProps {
-  title: string
-  onPress: () => void
-  disabled?: boolean
-}
-
-const Button = ({ title, onPress, disabled }: ButtonProps) => {
-  return (
-    <StyledButton onPress={onPress} disabled={disabled}>
-      <ButtonText>{title}</ButtonText>
-    </StyledButton>
-  )
-}
-
-// Styled Components
+// Estilos
 const FormContainer = styled.View`
-  padding: ${({ theme }) => theme.rs(20)}px;
-  background-color: white;
-  border-radius: ${({ theme }) => theme.rs(8)}px;
+  background-color: ${({ theme }) => theme.colors.cardBackground};
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  padding: ${({ theme }) => theme.spacing.lg}px;
   elevation: 3;
   shadow-color: #000;
   shadow-offset: 0 ${({ theme }) => theme.rs(2)}px;
@@ -102,41 +72,29 @@ const FormContainer = styled.View`
 
 const Separator = styled.Text`
   text-align: center;
-  margin-vertical: ${({ theme }) => theme.rs(10)}px;
+  margin-vertical: ${({ theme }) => theme.spacing.md}px;
   font-weight: bold;
-  color: #555;
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.rs(16)}px;
-`
+  position: relative;
 
-const InputContainer = styled.View`
-  margin-bottom: ${({ theme }) => theme.rs(16)}px;
-`
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    background-color: ${({ theme }) => theme.colors.border};
+    top: 50%;
+    width: 40%;
+  }
 
-const InputLabel = styled.Text`
-  font-size: ${({ theme }) => theme.rs(14)}px;
-  margin-bottom: ${({ theme }) => theme.rs(4)}px;
-  color: #333;
-`
+  &::before {
+    left: 0;
+  }
 
-const StyledTextInput = styled(TextInput)`
-  padding: ${({ theme }) => theme.rs(10)}px;
-  border-width: 1px;
-  border-color: #ddd;
-  border-radius: ${({ theme }) => theme.rs(4)}px;
-  font-size: ${({ theme }) => theme.rs(16)}px;
-`
-
-const StyledButton = styled(TouchableOpacity)`
-  background-color: ${({ disabled }) => (disabled ? '#cccccc' : '#007bff')};
-  padding: ${({ theme }) => theme.rs(12)}px;
-  border-radius: ${({ theme }) => theme.rs(4)}px;
-  align-items: center;
-`
-
-const ButtonText = styled.Text`
-  color: white;
-  font-weight: bold;
-  font-size: ${({ theme }) => theme.rs(16)}px;
+  &::after {
+    right: 0;
+  }
 `
 
 export default SearchForm

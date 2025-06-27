@@ -38,3 +38,9 @@ export interface FlightStatus {
 }
 
 export type FlightStatusCollection = FlightStatus[]
+
+export interface FlightSearchCriteria {
+  number?: string
+  origin?: string
+  destination?: string
+}

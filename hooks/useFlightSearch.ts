@@ -1,12 +1,6 @@
-import { FlightStatus, FlightStatusCollection } from '@/types'
+import { FlightSearchCriteria, FlightStatus, FlightStatusCollection } from '@/types'
 import { FlightService } from '@/services/flightService'
 import { useQuery } from '@tanstack/react-query'
-
-export interface FlightSearchCriteria {
-  number?: string
-  origin?: string
-  destination?: string
-}
 
 export const useFlightSearch = (criteria: FlightSearchCriteria | null) => {
   return useQuery<FlightStatus | FlightStatusCollection | null, Error>({

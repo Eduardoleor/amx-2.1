@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { View, ActivityIndicator, Text } from 'react-native'
 import { useRouter } from 'expo-router'
-import { FlightSearchCriteria, useFlightSearch } from '@/hooks/useFlightSearch'
+import { useFlightSearch } from '@/hooks/useFlightSearch'
 import SearchForm from '@/components/SearchForm'
+import { FlightSearchCriteria } from '@/types'
 
 export default function SearchScreen() {
   const [searchCriteria, setSearchCriteria] = useState<FlightSearchCriteria | null>(null)
