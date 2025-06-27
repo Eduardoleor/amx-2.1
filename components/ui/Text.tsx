@@ -1,4 +1,3 @@
-// components/Text/Text.tsx
 import React, { memo, useMemo } from 'react'
 import { Text as RNText, TextProps as RNTextProps, TextStyle } from 'react-native'
 import { useTheme } from 'styled-components/native'
@@ -24,7 +23,6 @@ export interface TextProps extends RNTextProps {
   style?: TextStyle
 }
 
-// Mapeo de variantes a estilos base
 const variantStyles: Record<TextVariant, TextStyle> = {
   heading1: {
     fontSize: 32,
@@ -74,20 +72,12 @@ const TextComponent: React.FC<TextProps> = ({
 }) => {
   const theme = useTheme() as Theme
 
-  // Memoizar los estilos para optimizar rendimiento
   const textStyle = useMemo(() => {
-    // Tamaño base según variante
     const baseStyle = variantStyles[variant]
-
-    // Obtener color del tema o usar valor directo
     const textColor = theme.colors[color as keyof Theme['colors']] || color
-
-    // Calcular lineHeight responsivo si no está definido
     const responsiveLineHeight = lineHeight
       ? theme.rs(lineHeight, 'font')
       : theme.rs(baseStyle.lineHeight || 24, 'font')
-
-    // Mapear peso a fuente específica
     const fontFamily = theme.fonts[weight]
 
     return {
@@ -114,5 +104,4 @@ const TextComponent: React.FC<TextProps> = ({
   )
 }
 
-// Exportar como componente memoizado para optimización
 export const Text = memo(TextComponent)

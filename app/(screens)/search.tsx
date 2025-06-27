@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router'
 import { useFlightSearch } from '@/hooks/useFlightSearch'
 import { FlightSearchCriteria } from '@/types'
 import { Text } from '@/components/ui/Text'
+import Layout from '@/components/Layout'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function SearchScreen() {
   const [searchCriteria, setSearchCriteria] = useState<FlightSearchCriteria | null>(null)
@@ -34,19 +36,9 @@ export default function SearchScreen() {
   }
 
   return (
-    <View className="flex-1 p-4 bg-red-50">
-      <Text>Texto normal</Text>
-      <Text variant="heading1">Título principal</Text>
-      <Text
-        variant="button"
-        color="primary"
-        align="center"
-        weight="bold"
-        transform="uppercase"
-        letterSpacing={0.5}
-      >
-        Botón importante
-      </Text>
-    </View>
+    <Layout>
+      <Text>Search Flights</Text>
+      <ThemeToggle size={26} />
+    </Layout>
   )
 }

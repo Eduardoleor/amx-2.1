@@ -54,4 +54,5 @@ export interface AppTheme extends BaseTheme {
     bold: string
   }
   rs: (value: number, type?: 'width' | 'height' | 'font') => number
+  themeMode: 'light' | 'dark'
 }

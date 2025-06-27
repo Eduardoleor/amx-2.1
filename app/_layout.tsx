@@ -39,10 +39,11 @@ export default function RootLayout() {
 }
 
 function AppContent({ rs }: { rs: (value: number, type?: 'width' | 'height' | 'font') => number }) {
-  const { theme } = useThemeContext()
+  const { themeMode, theme } = useThemeContext()
   const appTheme: AppTheme = useMemo(
     () => ({
       ...theme,
+      themeMode,
       fonts: {
         regular: 'Garnett-Regular',
         medium: 'Garnett-Medium',
@@ -50,7 +51,7 @@ function AppContent({ rs }: { rs: (value: number, type?: 'width' | 'height' | 'f
       },
       rs,
     }),
-    [theme, rs]
+    [theme, themeMode, rs]
   )
 
   return (
