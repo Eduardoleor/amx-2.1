@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { View, ActivityIndicator, Text } from 'react-native'
+import { View, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useFlightSearch } from '@/hooks/useFlightSearch'
-import SearchForm from '@/components/SearchForm'
 import { FlightSearchCriteria } from '@/types'
+import { Text } from '@/components/ui/Text'
 
 export default function SearchScreen() {
   const [searchCriteria, setSearchCriteria] = useState<FlightSearchCriteria | null>(null)
@@ -34,15 +34,19 @@ export default function SearchScreen() {
   }
 
   return (
-    <View className="flex-1 p-4 bg-gray-50">
-      <SearchForm onSubmit={handleSearch} />
-
-      {isLoading && (
-        <View className="mt-5 items-center">
-          <ActivityIndicator size="large" color="#3498db" />
-        </View>
-      )}
-      {error && <Text className="text-red-500 mt-3 text-center">Error: {error.message}</Text>}
+    <View className="flex-1 p-4 bg-red-50">
+      <Text>Texto normal</Text>
+      <Text variant="heading1">Título principal</Text>
+      <Text
+        variant="button"
+        color="primary"
+        align="center"
+        weight="bold"
+        transform="uppercase"
+        letterSpacing={0.5}
+      >
+        Botón importante
+      </Text>
     </View>
   )
 }

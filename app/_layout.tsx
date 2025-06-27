@@ -1,30 +1,63 @@
 import { Slot } from 'expo-router'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components/native'
 import useResponsiveStyles from '@/hooks/useResponsiveStyles'
+import { useFonts } from 'expo-font'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect, useMemo } from 'react'
+import { ThemeContextProvider, useThemeContext } from '@/contexts/ThemeContext'
 import { AppTheme } from '@/types'
-import { theme } from '@/constants/theme'
-import Layout from '@/components/ui/Layout'
+
+SplashScreen.preventAutoHideAsync()
 
 const queryClient = new QueryClient()
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    'Garnett-Regular': require('@/assets/fonts/Garnett-Regular.ttf'),
+    'Garnett-Medium': require('@/assets/fonts/Garnett-Medium.ttf'),
+    'Garnett-Bold': require('@/assets/fonts/Garnett-Bold.ttf'),
+  })
+
   const rs = useResponsiveStyles()
-  const buildTheme: AppTheme = {
-    ...theme,
-    rs,
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded])
+
+  if (!fontsLoaded) {
+    return null
   }
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider theme={buildTheme}>
-        <QueryClientProvider client={queryClient}>
-          <Layout>
-            <Slot />
-          </Layout>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ThemeContextProvider>
+      <AppContent rs={rs} />
+    </ThemeContextProvider>
+  )
+}
+
+function AppContent({ rs }: { rs: (value: number, type?: 'width' | 'height' | 'font') => number }) {
+  const { theme } = useThemeContext()
+  const appTheme: AppTheme = useMemo(
+    () => ({
+      ...theme,
+      fonts: {
+        regular: 'Garnett-Regular',
+        medium: 'Garnett-Medium',
+        bold: 'Garnett-Bold',
+      },
+      rs,
+    }),
+    [theme, rs]
+  )
+
+  return (
+    <ThemeProvider theme={appTheme}>
+      <QueryClientProvider client={queryClient}>
+        <Slot />
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }

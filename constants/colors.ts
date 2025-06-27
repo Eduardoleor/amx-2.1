@@ -1,0 +1,37 @@
+export const COLORS = {
+  light: {
+    primary: '#1872B3',
+    secondary: '#2E9509',
+    success: '#2E9509',
+    danger: '#E74C3C',
+    warning: '#FECB2F',
+    info: '#3498DB',
+    background: '#F8FAFC',
+    cardBackground: '#FFFFFF',
+    textPrimary: '#1E293B',
+    textSecondary: '#64748B',
+    border: '#E2E8F0',
+    accent: '#94A3B8',
+  },
+  dark: {
+    primary: '#4DA6FF',
+    secondary: '#7DD97F',
+    success: '#7DD97F',
+    danger: '#FF6B6B',
+    warning: '#FFE16B',
+    info: '#6BCBFF',
+    background: '#0F172A',
+    cardBackground: '#1E293B',
+    textPrimary: '#F1F5F9',
+    textSecondary: '#94A3B8',
+    border: '#334155',
+    accent: '#475569',
+  },
+  common: {
+    status: {
+      inair: '#1872B3',
+      ontime: '#2E9509',
+      delayed: '#FECB2F',
+    },
+  },
+}

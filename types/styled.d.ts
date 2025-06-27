@@ -28,6 +28,6 @@ declare module 'styled-components/native' {
       lg: number
       circle: number
     }
-    rs: (value: number, type?: 'width' | 'height' | 'font') => number
+    rs?: (value: number, type?: 'width' | 'height' | 'font') => number
   }
 }
