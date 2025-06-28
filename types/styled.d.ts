@@ -14,6 +14,7 @@ declare module 'styled-components/native' {
       textPrimary: string
       textSecondary: string
       border: string
+      accent: string
     }
     spacing: {
       xs: number

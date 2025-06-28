@@ -34,6 +34,8 @@ export interface LayoutProps {
   alignItems?: ViewStyle['alignItems']
   justifyContent?: ViewStyle['justifyContent']
   keyboardVerticalOffset?: number
+  statusBarColor?: keyof AppTheme['colors'] | string
+  statusBarTranslucent?: boolean
 }
 
 const Layout: FC<LayoutProps> = ({
@@ -44,6 +46,8 @@ const Layout: FC<LayoutProps> = ({
   scrollViewProps = {},
   safeAreaEdges = ['top', 'right', 'bottom', 'left'],
   safeAreaInsets,
+  statusBarColor,
+  statusBarTranslucent = false,
   backgroundColor = 'background',
   statusBarStyle = 'default',
   statusBarProps = {},
@@ -113,9 +117,27 @@ const Layout: FC<LayoutProps> = ({
     containerStyle,
   ])
 
+  const statusBarBgColor = useMemo(() => {
+    if (statusBarColor) {
+      if (statusBarColor in theme.colors) {
+        const color = theme.colors[statusBarColor as keyof typeof theme.colors]
+        if (typeof color === 'string') return color
+        if (color && typeof color === 'object' && 'main' in color && typeof color.main === 'string')
+          return color.main
+        return undefined
+      }
+      return statusBarColor
+    }
+    return bgColor
+  }, [statusBarColor, theme, bgColor])
+
   const safeAreaStyles = useMemo(() => {
-    return StyleSheet.flatten([styles.safeArea, style, { backgroundColor: bgColor }])
-  }, [bgColor, style])
+    return StyleSheet.flatten([
+      styles.safeArea,
+      style,
+      { backgroundColor: statusBarBgColor || bgColor },
+    ])
+  }, [bgColor, statusBarBgColor, style])
 
   const renderContent = () => {
     const content = scrollable ? (
@@ -149,7 +171,12 @@ const Layout: FC<LayoutProps> = ({
 
   return (
     <>
-      <StatusBar barStyle={resolvedStatusBarStyle} backgroundColor={bgColor} {...statusBarProps} />
+      <StatusBar
+        barStyle={resolvedStatusBarStyle}
+        backgroundColor={statusBarBgColor}
+        translucent={statusBarTranslucent}
+        {...statusBarProps}
+      />
       <SafeAreaView style={safeAreaStyles} edges={safeAreaEdges}>
         {renderContent()}
       </SafeAreaView>

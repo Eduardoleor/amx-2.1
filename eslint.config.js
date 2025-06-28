@@ -27,6 +27,7 @@ module.exports = defineConfig([
           printWidth: 100,
         },
       ],
+      'import/no-named-as-default': 'off',
     },
   },
   {

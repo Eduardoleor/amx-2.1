@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { TouchableOpacity, Animated, Easing } from 'react-native'
+import { TouchableOpacity, Animated } from 'react-native'
 import { useTheme } from 'styled-components/native'
 import { useThemeContext } from '@/contexts/ThemeContext'
 import { AppTheme } from '@/types'
@@ -10,28 +10,27 @@ interface ThemeToggleProps {
   style?: React.ComponentProps<typeof TouchableOpacity>['style']
 }
 
-const ThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => {
+const ButtonThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => {
   const theme = useTheme() as AppTheme
   const { toggleTheme, themeMode } = useThemeContext()
-  const spinValue = React.useRef(new Animated.Value(0)).current
+  const fadeAnim = React.useRef(new Animated.Value(1)).current
 
   const handlePress = () => {
-    // Animación de rotación
-    spinValue.setValue(0)
-    Animated.timing(spinValue, {
-      toValue: 1,
-      duration: 300,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start()
+    Animated.sequence([
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 120,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 120,
+        useNativeDriver: true,
+      }),
+    ]).start()
 
     toggleTheme()
   }
-
-  const rotate = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  })
 
   const iconProps = {
     size: theme.rs(size, 'font'),
@@ -46,7 +45,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => {
       activeOpacity={0.7}
       style={style}
     >
-      <Animated.View style={{ transform: [{ rotate }] }}>
+      <Animated.View style={{ opacity: fadeAnim }}>
         {themeMode === 'dark' ? (
           <IconSymbol name="sun.max.fill" {...iconProps} />
         ) : (
@@ -57,4 +56,4 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => {
   )
 }
 
-export default memo(ThemeToggle)
+export default memo(ButtonThemeToggle)
