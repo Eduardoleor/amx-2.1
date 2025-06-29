@@ -1,5 +1,3 @@
-import { DefaultTheme } from 'styled-components/native'
-
 export interface FlightStatusColors {
   inair: string
   ontime: string
@@ -14,8 +12,11 @@ export interface ActionableColors {
   warning: string
   danger: string
   info: string
+  outline: string
+  ghost: string
 }
-export interface BaseTheme extends DefaultTheme {
+
+export interface BaseTheme {
   colors: {
     primary: string
     secondary: string
@@ -23,14 +24,17 @@ export interface BaseTheme extends DefaultTheme {
     danger: string
     warning: string
     info: string
-    actionable: ActionableColors
-    status: FlightStatusColors
     background: string
     cardBackground: string
     textPrimary: string
     textSecondary: string
     border: string
     accent: string
+    actionable: ActionableColors
+    status: FlightStatusColors
+    textOnPrimary: string
+    textOnDark: string
+    textOnLight: string
   }
   spacing: {
     xs: number

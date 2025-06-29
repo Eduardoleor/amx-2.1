@@ -40,9 +40,31 @@ export default function RootLayout() {
 
 function AppContent({ rs }: { rs: (value: number, type?: 'width' | 'height' | 'font') => number }) {
   const { themeMode, theme } = useThemeContext()
-  const appTheme: AppTheme = useMemo(
-    () => ({
+
+  const appTheme: AppTheme = useMemo(() => {
+    const baseTheme = {
       ...theme,
+      colors: {
+        ...theme.colors,
+        actionable: theme.colors.actionable || {
+          primary: theme.colors.primary,
+          secondary: theme.colors.secondary,
+          success: theme.colors.success,
+          warning: theme.colors.warning,
+          danger: theme.colors.danger,
+          info: theme.colors.info,
+        },
+        status: theme.colors.status || {
+          inair: '#1872B3',
+          ontime: '#2E9509',
+          delayed: '#FECB2F',
+          arrived: themeMode === 'light' ? '#000000' : '#E2E8F0',
+        },
+      },
+    }
+
+    return {
+      ...baseTheme,
       themeMode,
       fonts: {
         regular: 'Garnett-Regular',
@@ -50,9 +72,8 @@ function AppContent({ rs }: { rs: (value: number, type?: 'width' | 'height' | 'f
         bold: 'Garnett-Bold',
       },
       rs,
-    }),
-    [theme, themeMode, rs]
-  )
+    }
+  }, [theme, themeMode, rs])
 
   return (
     <ThemeProvider theme={appTheme}>

@@ -1,89 +1,47 @@
-import React, { useState } from 'react'
-import { useRouter } from 'expo-router'
-import { useFlightSearch } from '@/hooks/useFlightSearch'
-import { FlightSearchCriteria } from '@/types'
-import { Layout, Header, SegmentedControl, InfoRow, DateRow } from '@/components'
-import styled from 'styled-components/native'
+import { Button } from '@/components/atoms/Button'
+import { Card } from '@/components/atoms/Card'
+import { IconSymbol } from '@/components/atoms/IconSymbol'
+import { SegmentedControl } from '@/components/atoms/SegmentedControl'
+import { Text } from '@/components/atoms/Text'
+import { Header } from '@/components/organisms/Header'
+import { Layout } from '@/components/organisms/Layout'
+import { useState } from 'react'
 
 export default function SearchScreen() {
-  const [searchCriteria, setSearchCriteria] = useState<FlightSearchCriteria | null>(null)
-  const [selectedOption, setSelectedOption] = useState<0 | 1>(0)
-
-  const [flightNumber, setFlightNumber] = useState('')
-  const [flightDate, setFlightDate] = useState(new Date())
-
-  const { data, isLoading, error } = useFlightSearch(searchCriteria)
-  const router = useRouter()
-
-  React.useEffect(() => {
-    if (data) {
-      if (searchCriteria?.number) {
-        router.push({
-          pathname: '/(screens)/details',
-          params: { flight: JSON.stringify(data) },
-        })
-      } else {
-        router.push({
-          pathname: '/(screens)/results',
-          params: { flights: JSON.stringify(data) },
-        })
-      }
-      setSearchCriteria(null)
-    }
-  }, [data, router, searchCriteria?.number])
-
-  const handleSearch = (criteria: FlightSearchCriteria) => {
-    if (criteria.number || (criteria.origin && criteria.destination)) {
-      setSearchCriteria(criteria)
-    }
-  }
-
-  const handleChangeFlightNumber = (number: string) => {
-    const numericValue = number.replace(/[^0-9]/g, '')
-    setFlightNumber(numericValue)
-  }
+  const [selectedFilter, setSelectedFilter] = useState(0)
 
   return (
-    <Layout statusBarColor="accent">
+    <Layout backgroundColor="accent">
       <Header buttonTheme title="Track your flight" description="Keep you informed in real time!" />
-      <StyledSegmentedControl
-        options={['Flight Number', 'Destination']}
-        selectedIndex={selectedOption}
-        onSelect={setSelectedOption}
+      <Text variant="heading1">Título Principal</Text>
+      <Text variant="body" color="status.ontime" align="center" weight="500" letterSpacing={0.5}>
+        Texto personalizado
+      </Text>
+      <Text variant="button" color="actionable.primary">
+        Botón Importante
+      </Text>
+      <IconSymbol name="house.fill" size={90} color={'red'} />
+      <Button title="Botón de búsqueda" />
+      <Button
+        variant="primary"
+        size="md"
+        title="Presionar"
+        onPress={() => console.log('Botón presionado')}
+        iconLeft="checkmark"
+        haptic
       />
-      {selectedOption === 0 ? (
-        <RowContent>
-          <InfoRow
-            title="Flight Number"
-            contentPlaceholder="000"
-            descriptionPlaceholder="AM"
-            placeholderPosition="left"
-            description={flightNumber}
-            onDescriptionChange={handleChangeFlightNumber}
-            textInputProps={{
-              maxLength: 3,
-              keyboardType: 'numeric',
-            }}
-          />
-          <DateRow title="Date of departure" date={flightDate} onDateChange={setFlightDate} />
-        </RowContent>
-      ) : (
-        <RowContent></RowContent>
-      )}
+      <SegmentedControl
+        options={['Todos', 'Activos', 'Completados']}
+        selectedIndex={selectedFilter}
+        onSelect={setSelectedFilter}
+        style={{ marginVertical: 16 }}
+      />
+      <Card elevated={false} borderColor="primary">
+        <Text>Card con borde</Text>
+      </Card>
+      <Card animationType="scale" onPress={() => console.log('Card presionada')}>
+        <Text>Card con animación</Text>
+      </Card>
     </Layout>
   )
 }
-
-const StyledSegmentedControl = styled(SegmentedControl)`
-  margin: ${({ theme }) => theme.rs?.(-20)}px;
-`
-
-const RowContent = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
-  padding: ${({ theme }) => theme.rs?.(20)}px;
-  margin-top: ${({ theme }) => theme.rs?.(30)}px;
-  gap: ${({ theme }) => theme.spacing.md}px;
-`

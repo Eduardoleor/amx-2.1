@@ -2,6 +2,8 @@ import { BaseTheme } from '@/types'
 import { COLORS } from './colors'
 
 export const createTheme = (mode: 'light' | 'dark'): BaseTheme => {
+  const modeColors = COLORS[mode]
+
   return {
     spacing: {
       xs: 4,
@@ -17,8 +19,20 @@ export const createTheme = (mode: 'light' | 'dark'): BaseTheme => {
       circle: 100,
     },
     colors: {
-      ...COLORS[mode],
-      actionable: { ...COLORS[mode] },
+      ...modeColors,
+      textOnPrimary: modeColors.textOnPrimary,
+      textOnDark: modeColors.textOnDark,
+      textOnLight: modeColors.textOnLight,
+      actionable: {
+        primary: modeColors.primary,
+        secondary: modeColors.secondary,
+        success: modeColors.success,
+        warning: modeColors.warning,
+        danger: modeColors.danger,
+        info: modeColors.info,
+        outline: modeColors.outline,
+        ghost: modeColors.ghost,
+      },
       status: {
         ...COLORS.common.status,
         arrived: mode === 'light' ? '#000000' : '#E2E8F0',

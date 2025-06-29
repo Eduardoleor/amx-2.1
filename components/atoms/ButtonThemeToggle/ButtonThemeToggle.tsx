@@ -1,16 +1,17 @@
-import React, { memo } from 'react'
-import { TouchableOpacity, Animated } from 'react-native'
+import React from 'react'
+import { Animated, StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from 'styled-components/native'
 import { useThemeContext } from '@/contexts/ThemeContext'
+import { IconSymbol } from '@/components/atoms/IconSymbol'
+import { Touchable } from '@/components/atoms/Touchable'
 import { AppTheme } from '@/types'
-import { IconSymbol } from './ui/IconSymbol'
 
-interface ThemeToggleProps {
+export interface ButtonThemeToggleProps {
   size?: number
-  style?: React.ComponentProps<typeof TouchableOpacity>['style']
+  style?: StyleProp<ViewStyle>
 }
 
-const ButtonThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => {
+export const ButtonThemeToggle: React.FC<ButtonThemeToggleProps> = ({ size = 24, style }) => {
   const theme = useTheme() as AppTheme
   const { toggleTheme, themeMode } = useThemeContext()
   const fadeAnim = React.useRef(new Animated.Value(1)).current
@@ -38,11 +39,10 @@ const ButtonThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => 
   }
 
   return (
-    <TouchableOpacity
+    <Touchable
       onPress={handlePress}
       accessibilityLabel={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
       accessibilityRole="button"
-      activeOpacity={0.7}
       style={style}
     >
       <Animated.View style={{ opacity: fadeAnim }}>
@@ -52,8 +52,6 @@ const ButtonThemeToggle: React.FC<ThemeToggleProps> = ({ size = 24, style }) => 
           <IconSymbol name="moon.fill" {...iconProps} />
         )}
       </Animated.View>
-    </TouchableOpacity>
+    </Touchable>
   )
 }
-
-export default memo(ButtonThemeToggle)
