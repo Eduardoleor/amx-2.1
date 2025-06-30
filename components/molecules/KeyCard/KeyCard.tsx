@@ -29,7 +29,8 @@ export const KeyCard: React.FC<KeyCardProps> = ({
   const theme = useTheme()
 
   const date = value ? new Date(value) : new Date()
-  const formattedDate = format(date, 'EEEE, MMM d', { locale: enUS })
+  const isValidDate = date instanceof Date && !isNaN(date.getTime())
+  const formattedDate = isValidDate ? format(date, 'EEEE, MMM d', { locale: enUS }) : ''
 
   const customContent = () => {
     switch (type) {
@@ -43,11 +44,15 @@ export const KeyCard: React.FC<KeyCardProps> = ({
           </>
         )
       case 'destination':
+        const valueParts = String(value).split(',')
+        const airport = valueParts[0]?.trim() || ''
+        const countryCode = valueParts[1]?.trim() || ''
+
         return (
           <>
-            <Text weight="bold">Mexico City</Text>
+            <Text weight="bold">{airport}</Text>
             <Text weight="bold" opacity={0.3}>
-              MEX
+              {countryCode}
             </Text>
           </>
         )

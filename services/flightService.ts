@@ -1,5 +1,5 @@
-import { MOCK_FLIGHTS } from '@/constants/mocks'
-import { FlightStatus, FlightStatusCollection } from '@/types'
+import { AIRPORT_CITIES, MOCK_FLIGHTS } from '@/constants/mocks'
+import { AirportCity, FlightStatus, FlightStatusCollection } from '@/types'
 
 const simulateRequest = <T>(data: T): Promise<T> => {
   return new Promise((resolve) => {
@@ -26,5 +26,10 @@ export const FlightService = {
           f.segment.marketingFlightCode === flightNumber
       )
     )
+  },
+
+  getAirports: async (): Promise<AirportCity[]> => {
+    const airportsArray = Object.values(AIRPORT_CITIES.airportCities)
+    return simulateRequest(airportsArray)
   },
 }

@@ -592,11 +592,11 @@ export const AIRPORT_CITIES: AirportCitiesData = {
   airportCities: {
     MEX: {
       city: 'Mexico City',
-      country: 'Mex',
+      country: 'MEX',
     },
     CUN: {
       city: 'Cancun',
-      country: 'Mex',
+      country: 'CUN',
     },
   },
 }

@@ -28,6 +28,7 @@ module.exports = defineConfig([
         },
       ],
       'import/no-named-as-default': 'off',
+      'import/no-cycle': 'off',
     },
   },
   {
