@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect, useMemo } from 'react'
 import { ThemeContextProvider, useThemeContext } from '@/contexts/ThemeContext'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { AppTheme } from '@/types'
 
 SplashScreen.preventAutoHideAsync()
@@ -32,9 +33,11 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeContextProvider>
-      <AppContent rs={rs} />
-    </ThemeContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeContextProvider>
+        <AppContent rs={rs} />
+      </ThemeContextProvider>
+    </GestureHandlerRootView>
   )
 }
 

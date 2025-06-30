@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ViewStyle, StyleProp } from 'react-native'
+import { View, ViewStyle, StyleProp, DimensionValue } from 'react-native'
 import { useTheme } from 'styled-components/native'
 import { AppTheme } from '@/types'
 
@@ -15,6 +15,9 @@ interface ContainerProps {
   verticalMargin?: keyof AppTheme['spacing'] | number
   alignItems?: ViewStyle['alignItems']
   justifyContent?: ViewStyle['justifyContent']
+  flexDirection?: ViewStyle['flexDirection']
+  flex?: number
+  height?: DimensionValue
 }
 
 export const Container: React.FC<ContainerProps> = ({
@@ -29,6 +32,9 @@ export const Container: React.FC<ContainerProps> = ({
   verticalMargin,
   alignItems,
   justifyContent,
+  flexDirection,
+  flex,
+  height,
 }) => {
   const theme = useTheme() as AppTheme
 
@@ -53,6 +59,9 @@ export const Container: React.FC<ContainerProps> = ({
     marginVertical: resolveSpacing(verticalMargin),
     alignItems,
     justifyContent,
+    flexDirection,
+    flex,
+    height,
   }
 
   return <View style={[containerStyle, style]}>{children}</View>

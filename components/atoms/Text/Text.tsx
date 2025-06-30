@@ -27,6 +27,8 @@ export interface TextProps extends RNTextProps {
   transform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
   lineHeight?: number
   letterSpacing?: number
+  opacity?: number
+  underline?: boolean
   style?: StyleProp<TextStyle>
 }
 
@@ -87,6 +89,8 @@ export const Text: React.FC<TextProps> = ({
   transform = 'none',
   lineHeight,
   letterSpacing,
+  opacity,
+  underline = false,
   style,
   children,
   ...rest
@@ -130,6 +134,8 @@ export const Text: React.FC<TextProps> = ({
           lineHeight: finalLineHeight,
           letterSpacing: finalLetterSpacing,
           textTransform: transform,
+          opacity: typeof opacity === 'number' ? opacity : 1,
+          textDecorationLine: underline ? 'underline' : 'none',
         },
         style,
       ]}

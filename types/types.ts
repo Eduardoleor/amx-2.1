@@ -44,3 +44,14 @@ export interface FlightSearchCriteria {
   origin?: string
   destination?: string
 }
+
+export interface AirportCity {
+  city: string
+  country: string
+}
+
+export type AirportCities = Record<string, AirportCity>
+
+export interface AirportCitiesData {
+  airportCities: AirportCities
+}

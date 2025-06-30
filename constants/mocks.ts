@@ -1,4 +1,4 @@
-import { FlightStatusCollection } from '@/types'
+import { AirportCitiesData, FlightStatusCollection } from '@/types'
 
 export const OrigenDestinoResponse: { flightStatusCollection: FlightStatusCollection } = {
   flightStatusCollection: [
@@ -586,6 +586,19 @@ export const NumerodeVueloResponse: { flightStatusCollection: FlightStatusCollec
       totalFlightTimeInMinutes: 148,
     },
   ],
+}
+
+export const AIRPORT_CITIES: AirportCitiesData = {
+  airportCities: {
+    MEX: {
+      city: 'Mexico City',
+      country: 'Mex',
+    },
+    CUN: {
+      city: 'Cancun',
+      country: 'Mex',
+    },
+  },
 }
 
 export const MOCK_FLIGHTS: FlightStatusCollection = [
