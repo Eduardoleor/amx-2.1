@@ -27,8 +27,8 @@ interface BottomDatePickerModalProps {
 const getYearRange = () => {
   const now = new Date()
   const year = now.getFullYear()
-  const min = new Date(year, 0, 1)
-  const max = new Date(year, 11, 31, 23, 59, 59, 999)
+  const min = new Date(year - 10, 0, 1)
+  const max = new Date(year + 10, 11, 31, 23, 59, 59, 999)
   return { min, max }
 }
 

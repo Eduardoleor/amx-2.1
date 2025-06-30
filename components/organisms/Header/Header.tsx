@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import styled from 'styled-components/native'
+import styled, { useTheme } from 'styled-components/native'
 import { StyleProp, ViewStyle } from 'react-native'
 import { AppTheme } from '@/types'
 import { Container } from '@/components/atoms/Container'
@@ -27,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   backgroundColor = 'accent',
 }) => {
   const navigation = useNavigation()
+  const theme = useTheme() as AppTheme
 
   const handleBack = () => {
     if (navigation.canGoBack()) {
@@ -35,18 +36,19 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <HeaderContainer backgroundColor={backgroundColor} padding="md" style={style}>
+    <HeaderContainer backgroundColor={backgroundColor} padding="md" style={style} noBorder={back}>
       {back && (
         <BackButton onPress={handleBack} accessibilityLabel="Go back" accessibilityRole="button">
-          <IconSymbol name="chevron.left" size={24} color="textPrimary" />
+          <IconSymbol name="chevron.left" size={30} color={theme.colors.textPrimary} />
         </BackButton>
       )}
 
-      <ContentContainer centered={!back}>
+      <ContentContainer centered={!back} alignRight={back}>
         <Title
           variant="heading2"
           numberOfLines={1}
           centered={!back}
+          alignRight={back}
           weight="bold"
           color="textPrimary"
         >
@@ -54,12 +56,33 @@ export const Header: React.FC<HeaderProps> = ({
         </Title>
 
         {description &&
-          (typeof description === 'string' ? (
-            <Description variant="body" color="textPrimary" numberOfLines={2} centered={!back}>
+          (typeof description === 'string' && !back ? (
+            <Description
+              variant="body"
+              color="textPrimary"
+              numberOfLines={2}
+              centered={!back}
+              alignRight={back}
+            >
               {description}
             </Description>
           ) : (
-            <DescriptionContainer centered={!back}>{description}</DescriptionContainer>
+            <DescriptionRowContainer>
+              <Description
+                variant="body"
+                color="textPrimary"
+                numberOfLines={2}
+                centered={!back}
+                alignRight={back}
+              >
+                {description}
+              </Description>
+              <Text opacity={0.3}>|</Text>
+              <DescriptionRowContainer>
+                <IconSymbol name="calendar" size={20} color={theme.colors.textPrimary} />
+                <Text underline>Change</Text>
+              </DescriptionRowContainer>
+            </DescriptionRowContainer>
           ))}
       </ContentContainer>
 
@@ -71,12 +94,13 @@ export const Header: React.FC<HeaderProps> = ({
 const HeaderContainer = styled(Container)<{
   backgroundColor?: keyof AppTheme['colors']
   theme: AppTheme
+  noBorder?: boolean
 }>`
   flex-direction: row;
   align-items: center;
   width: 100%;
   height: ${({ theme }) => theme.rs(150, 'height')}px;
-  border-bottom-width: 1px;
+  border-bottom-width: ${({ noBorder }) => (noBorder ? 0 : 1)}px;
   border-bottom-color: ${({ theme }) => theme.colors.border};
   background-color: ${({ theme, backgroundColor = 'accent' }) =>
     String(theme.colors[backgroundColor])};
@@ -85,40 +109,38 @@ const HeaderContainer = styled(Container)<{
 const BackButton = styled(Touchable)<{ theme: AppTheme }>`
   margin-right: ${({ theme }) => theme.spacing.md}px;
   padding: ${({ theme }) => theme.spacing.xs}px;
+  z-index: 1;
 `
 
 const ContentContainer = styled.View<{
   centered: boolean
+  alignRight?: boolean
   theme: AppTheme
 }>`
   flex: 1;
-  align-items: ${({ centered }) => (centered ? 'center' : 'flex-start')};
+  align-items: ${({ centered, alignRight }) =>
+    alignRight ? 'flex-end' : centered ? 'center' : 'flex-start'};
 `
 
 const Title = styled(Text)<{
   centered: boolean
+  alignRight?: boolean
   theme: AppTheme
 }>`
   margin-bottom: ${({ theme }) => theme.spacing.xs}px;
-  text-align: ${({ centered }) => (centered ? 'center' : 'left')};
+  text-align: ${({ centered, alignRight }) =>
+    alignRight ? 'right' : centered ? 'center' : 'left'};
   width: 100%;
 `
 
 const Description = styled(Text)<{
   centered: boolean
+  alignRight?: boolean
   theme: AppTheme
 }>`
   opacity: 0.8;
-  text-align: ${({ centered }) => (centered ? 'center' : 'left')};
-  width: 100%;
-`
-
-const DescriptionContainer = styled.View<{
-  centered: boolean
-  theme: AppTheme
-}>`
-  opacity: 0.8;
-  align-items: ${({ centered }) => (centered ? 'center' : 'flex-start')};
+  text-align: ${({ centered, alignRight }) =>
+    alignRight ? 'right' : centered ? 'center' : 'left'};
   width: 100%;
 `
 
@@ -126,4 +148,12 @@ const ThemeToggleButton = styled(ButtonThemeToggle)`
   position: absolute;
   right: 16px;
   top: 16px;
+`
+
+const DescriptionRowContainer = styled(Container)<{
+  theme: AppTheme
+}>`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs}px;
 `

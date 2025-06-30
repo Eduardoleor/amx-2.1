@@ -58,7 +58,7 @@ export const Search = () => {
 
   const handleSearch = () => {
     router.push({
-      pathname: '/(screens)/details',
+      pathname: '/(screens)/results',
       params: {
         criteria: tabOption === 0 ? 'single' : 'multiple',
         flightNumber: tabOption === 0 ? flightNumber : undefined,

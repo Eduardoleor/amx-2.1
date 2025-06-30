@@ -1,4 +1,6 @@
 import { FlightStatus } from '@/types'
+import { format } from 'date-fns'
+import { enUS } from 'date-fns/locale'
 
 export const formatFlightTime = (dateTimeStr?: string): string => {
   if (!dateTimeStr) return '--:--'
@@ -30,4 +32,10 @@ export const formatFlightDuration = (minutes: number): string => {
   const hours = Math.floor(minutes / 60)
   const mins = minutes % 60
   return `${hours}h ${mins}m`
+}
+
+export const formatLongDate = (value?: string | number | Date): string => {
+  const date = value ? new Date(value) : new Date()
+  const isValidDate = date instanceof Date && !isNaN(date.getTime())
+  return isValidDate ? format(date, 'EEEE, MMM d', { locale: enUS }) : ''
 }

@@ -43,6 +43,7 @@ export interface FlightSearchCriteria {
   number?: string
   origin?: string
   destination?: string
+  date?: string
 }
 
 export interface AirportCity {

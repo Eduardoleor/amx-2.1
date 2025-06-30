@@ -10,20 +10,31 @@ const simulateRequest = <T>(data: T): Promise<T> => {
 }
 
 export const FlightService = {
-  searchByRoute: async (origin: string, destination: string): Promise<FlightStatusCollection> => {
+  searchByRoute: async (
+    origin: string,
+    destination: string,
+    date?: string
+  ): Promise<FlightStatusCollection> => {
     return simulateRequest(
       MOCK_FLIGHTS.filter(
-        (f) => f.segment.departureAirport === origin && f.segment.arrivalAirport === destination
+        (f) =>
+          f.segment.departureAirport === origin &&
+          f.segment.arrivalAirport === destination &&
+          f.segment.departureDateTime.split('T')[0] === date
       )
     )
   },
 
-  searchByNumber: async (flightNumber: string): Promise<FlightStatus | undefined> => {
+  searchByNumber: async (
+    flightNumber: string,
+    date?: string
+  ): Promise<FlightStatus | undefined> => {
     return simulateRequest(
       MOCK_FLIGHTS.find(
         (f) =>
-          f.segment.operatingFlightCode === flightNumber ||
-          f.segment.marketingFlightCode === flightNumber
+          (f.segment.operatingFlightCode === flightNumber ||
+            f.segment.marketingFlightCode === flightNumber) &&
+          f.segment.departureDateTime.split('T')[0] === date
       )
     )
   },

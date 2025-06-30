@@ -9,10 +9,14 @@ export const useFlightSearch = (criteria: FlightSearchCriteria | null) => {
       if (!criteria) return null
 
       if (criteria.number) {
-        const result = await FlightService.searchByNumber(criteria.number)
+        const result = await FlightService.searchByNumber(criteria.number, criteria.date)
         return result ?? null
       } else if (criteria.origin && criteria.destination) {
-        const result = await FlightService.searchByRoute(criteria.origin, criteria.destination)
+        const result = await FlightService.searchByRoute(
+          criteria.origin,
+          criteria.destination,
+          criteria.date
+        )
         return result ?? null
       }
       return null
