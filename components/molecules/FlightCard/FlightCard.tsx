@@ -1,43 +1,104 @@
-import { Chip, Container, Text } from '@/components/atoms'
+import { Chip, Container, Switch, Text } from '@/components/atoms'
 import { Card } from '@/components/atoms/Card'
-import Switch from '@/components/atoms/Switch/Switch'
 import { FC } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { FlightStatus } from '../FlightStatus'
 import { View } from 'react-native'
+import { transformStatus, transformStatusLabel } from '@/utils/data'
+import {
+  formatAMFlightNumber,
+  formatShortFlightDuration,
+  getHoursAndMinutes,
+} from '@/utils/formatters'
+import { IconSymbol } from '@/components/atoms/IconSymbol'
+import { Touchable } from '@/components/atoms/Touchable'
 
-export const FlightCard: FC = () => {
+interface FlightCardProps {
+  flight: {
+    number: string
+    status: string
+    departureAirport: string
+    arrivalAirport: string
+    departureDateTime: string
+    arrivalDateTime: string
+    duration: number
+    segmentCode: string
+    isFavorite?: boolean
+  }
+  optionFavorite?: boolean
+  onDetail: (number: string) => void
+  onFavoriteToggle?: (code: string) => void
+}
+
+export const FlightCard: FC<FlightCardProps> = ({
+  flight,
+  optionFavorite,
+  onFavoriteToggle,
+  onDetail,
+}) => {
+  const theme = useTheme()
   return (
     <StyledCard padding={0}>
       <Container flexDirection="row" justifyContent="space-between" alignItems="center">
-        <Chip text="Arrived" color="success" status="delayed" shape="custom" />
-        <Switch
-          labelPosition="left"
-          label="Favorite"
-          size="sm"
-          value={false}
-          color="outline"
-          onValueChange={() => {}}
+        <Chip
+          text={transformStatusLabel(flight?.status ?? '')}
+          status={transformStatus(flight?.status ?? '')}
+          shape="custom"
         />
+        {optionFavorite && (
+          <Switch
+            labelPosition="left"
+            label="Favorite"
+            size="sm"
+            value={flight?.isFavorite ?? false}
+            onValueChange={() => {
+              if (onFavoriteToggle) {
+                onFavoriteToggle(flight?.segmentCode)
+              }
+            }}
+          />
+        )}
       </Container>
-      <Container flexDirection="row" justifyContent="space-between">
+      <Container
+        flexDirection="row"
+        justifyContent="space-between"
+        horizontalPadding="md"
+        verticalMargin="sm"
+      >
         <Container>
-          <Text>6:24</Text>
-          <Text>MEXT</Text>
+          <Text variant="heading3">{getHoursAndMinutes(flight?.departureDateTime)}</Text>
+          <Text align="left">{flight?.departureAirport}</Text>
         </Container>
-        <Container flex={1}>
-          <FlightStatus status="delayed" />
-          <Text>2h 28m</Text>
+        <Container flex={1} justifyContent="space-between">
+          <FlightStatus status={transformStatus(flight?.status ?? '')} />
+          <Text align="center" variant="caption" weight="bold" opacity={0.5}>
+            {formatShortFlightDuration(flight?.duration ?? 0)}
+          </Text>
         </Container>
         <Container>
-          <Text>9:24</Text>
-          <Text>CUN</Text>
+          <Text variant="heading3">{getHoursAndMinutes(flight?.arrivalDateTime)}</Text>
+          <Text align="right">{flight?.arrivalAirport}</Text>
         </Container>
       </Container>
       <Separator />
-      <Container flexDirection="row" justifyContent="space-between">
-        <Text>AM 500</Text>
-        <Text>DEtails</Text>
+      <Container
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        horizontalMargin="md"
+        verticalMargin="xs"
+      >
+        <Text variant="caption" weight="bold">
+          {formatAMFlightNumber(flight?.number)}
+        </Text>
+        <Touchable onPress={() => onDetail(flight?.segmentCode)}>
+          <Container flexDirection="row" alignItems="center">
+            <Text variant="caption" underline>
+              Details
+            </Text>
+            <IconSymbol name="chevron.right" size={16} color={theme.colors.textPrimary} />
+          </Container>
+        </Touchable>
       </Container>
     </StyledCard>
   )

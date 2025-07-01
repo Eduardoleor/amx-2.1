@@ -1,46 +1,108 @@
-import { Container, Header, Layout, Text } from '@/components'
-import { FlightCard } from '@/components/molecules/FlightCard'
+import React, { useEffect, useMemo, useState } from 'react'
+import { BottomDatePickerModal, Container, Header, Layout, ListFlights, Text } from '@/components'
+import { useFlightFavorites } from '@/hooks/useFlightFavorites'
 import { useFlightSearch } from '@/hooks/useFlightSearch'
-import { formatLongDate } from '@/utils/formatters'
-import { useLocalSearchParams } from 'expo-router'
-import React, { useEffect } from 'react'
+import { FlightStatus, SearchParams } from '@/types'
+import { toArray } from '@/utils/data'
+import { formatAMFlightNumber, formatDateToString, formatLongDate } from '@/utils/formatters'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { getFlightRoute } from '@/hooks/useFlightRoute'
 
 export const List = () => {
-  const params = useLocalSearchParams()
-  const criteria = params.criteria as 'single' | 'multiple' | undefined
-  const flightNumber = params.flightNumber ? parseInt(params.flightNumber as string, 10) : undefined
-  const flightDate = params.flightDate ? new Date(params.flightDate as string) : undefined
-  const origin = params.origin as string | undefined
-  const destination = params.destination as string | undefined
+  const [searchParams, setSearchParams] = useState<SearchParams>({})
+  const [items, setItems] = useState<FlightStatus[]>([])
+  const [dateModalVisible, setDateModalVisible] = useState(false)
 
-  const [flightDirection, setFlightDirection] = React.useState('')
+  const router = useRouter()
+  const params = useLocalSearchParams() as SearchParams
 
+  const route = getFlightRoute(searchParams.flightNumber ?? '')
+  const { toggleFavorite } = useFlightFavorites()
   const { data, isLoading, error } = useFlightSearch({
-    number: flightNumber ? flightNumber.toString() : undefined,
-    origin: origin,
-    destination: destination,
-    date: flightDate ? flightDate.toISOString().split('T')[0] : undefined,
+    number: searchParams.flightNumber,
+    origin: searchParams.origin,
+    destination: searchParams.destination,
+    date: searchParams.flightDate,
   })
 
-  console.log(data, isLoading, error)
+  const flightTitle = useMemo(() => {
+    if (!searchParams.flightNumber) {
+      return `${searchParams.origin},${searchParams.destination}`
+    }
+    return searchParams.flightNumber
+  }, [searchParams.destination, searchParams.flightNumber, searchParams.origin])
 
-  useEffect(() => {}, [])
+  const handleChangeDate = (date: Date) => {
+    const newDate = formatDateToString(date)
+    router.setParams({
+      ...params,
+      flightDate: newDate,
+    })
+  }
+
+  const handleDetailsPress = (segmentCode: string) => {
+    router.push({
+      pathname: '/(screens)/details',
+      params: {
+        id: segmentCode,
+      },
+    })
+  }
+
+  useEffect(() => {
+    if (data) {
+      setItems(toArray(data) as FlightStatus[])
+    }
+  }, [data])
+
+  useEffect(() => {
+    const { criteria, flightNumber, flightDate, origin, destination } = params
+    setSearchParams({
+      criteria,
+      flightNumber,
+      flightDate,
+      origin,
+      destination,
+    })
+  }, [params.criteria, params.flightNumber, params.flightDate, params.origin, params.destination])
 
   return (
     <Layout>
       <Header
         back
         backgroundColor="background"
-        title={`AM ${flightNumber}`}
-        description={formatLongDate(flightDate)}
+        title={formatAMFlightNumber(flightTitle, params.criteria === 'multiple')}
+        description={formatLongDate(searchParams.flightDate, true)}
+        onChangeDate={() => setDateModalVisible(true)}
       />
-      <Container padding="md">
+      <Container backgroundColor="background" height="100%" padding="md">
         <Container flexDirection="row" justifyContent="space-between">
-          <Text>Mexico City to Cancún</Text>
-          <Text>4 results</Text>
+          <Text variant="caption" weight="bold">
+            {route || 'Flight Route'}
+          </Text>
+          <Text variant="caption" opacity={0.5}>
+            {items.length} results
+          </Text>
         </Container>
-        <FlightCard />
+        <Container verticalMargin="lg" height="100%" flex={1}>
+          <ListFlights
+            items={items}
+            criteria={params.criteria ?? 'single'}
+            isLoading={isLoading}
+            error={error}
+            onDetail={handleDetailsPress}
+            onFavoriteToggle={toggleFavorite}
+          />
+        </Container>
       </Container>
+      <BottomDatePickerModal
+        isVisible={dateModalVisible}
+        onClose={() => setDateModalVisible(false)}
+        onConfirm={handleChangeDate}
+        value={new Date(searchParams.flightDate || Date.now())}
+        title="Select Date"
+        confirmText="Confirm"
+      />
     </Layout>
   )
 }

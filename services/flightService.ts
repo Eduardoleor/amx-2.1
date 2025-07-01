@@ -43,4 +43,10 @@ export const FlightService = {
     const airportsArray = Object.values(AIRPORT_CITIES.airportCities)
     return simulateRequest(airportsArray)
   },
+
+  getBySegmentCode: async (segmentCode: string): Promise<FlightStatus | undefined> => {
+    return simulateRequest(
+      MOCK_FLIGHTS.find((flight) => flight.segment.segmentCode === segmentCode)
+    )
+  },
 }

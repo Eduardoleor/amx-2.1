@@ -14,6 +14,7 @@ interface HeaderProps {
   back?: boolean
   title: string
   description?: string | ReactNode
+  onChangeDate?: () => void
   style?: StyleProp<ViewStyle>
   backgroundColor?: keyof AppTheme['colors']
 }
@@ -25,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   description,
   style,
   backgroundColor = 'accent',
+  onChangeDate,
 }) => {
   const navigation = useNavigation()
   const theme = useTheme() as AppTheme
@@ -36,7 +38,13 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <HeaderContainer backgroundColor={backgroundColor} padding="md" style={style} noBorder={back}>
+    <HeaderContainer
+      backgroundColor={backgroundColor}
+      padding="md"
+      style={style}
+      noBorder={back}
+      hasBack={back}
+    >
       {back && (
         <BackButton onPress={handleBack} accessibilityLabel="Go back" accessibilityRole="button">
           <IconSymbol name="chevron.left" size={30} color={theme.colors.textPrimary} />
@@ -68,19 +76,15 @@ export const Header: React.FC<HeaderProps> = ({
             </Description>
           ) : (
             <DescriptionRowContainer>
-              <Description
-                variant="body"
-                color="textPrimary"
-                numberOfLines={2}
-                centered={!back}
-                alignRight={back}
-              >
+              <Description variant="body" numberOfLines={2} centered={!back} alignRight={back}>
                 {description}
               </Description>
               <Text opacity={0.3}>|</Text>
               <DescriptionRowContainer>
                 <IconSymbol name="calendar" size={20} color={theme.colors.textPrimary} />
-                <Text underline>Change</Text>
+                <Text underline onPress={onChangeDate}>
+                  Change
+                </Text>
               </DescriptionRowContainer>
             </DescriptionRowContainer>
           ))}
@@ -95,11 +99,12 @@ const HeaderContainer = styled(Container)<{
   backgroundColor?: keyof AppTheme['colors']
   theme: AppTheme
   noBorder?: boolean
+  hasBack?: boolean
 }>`
   flex-direction: row;
-  align-items: center;
+  align-items: ${({ hasBack }) => (hasBack ? 'flex-start' : 'center')};
   width: 100%;
-  height: ${({ theme }) => theme.rs(150, 'height')}px;
+  height: ${({ theme, hasBack }) => (!hasBack ? theme.rs(150, 'height') : 'auto')}px;
   border-bottom-width: ${({ noBorder }) => (noBorder ? 0 : 1)}px;
   border-bottom-color: ${({ theme }) => theme.colors.border};
   background-color: ${({ theme, backgroundColor = 'accent' }) =>
@@ -110,6 +115,7 @@ const BackButton = styled(Touchable)<{ theme: AppTheme }>`
   margin-right: ${({ theme }) => theme.spacing.md}px;
   padding: ${({ theme }) => theme.spacing.xs}px;
   z-index: 1;
+  margin-top: ${({ theme }) => theme.spacing.lg}px;
 `
 
 const ContentContainer = styled.View<{

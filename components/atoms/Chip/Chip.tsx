@@ -47,6 +47,7 @@ const ChipContainer = styled.Pressable<StyledChipProps & { theme: AppTheme }>`
   padding-right: ${({ theme }) => theme.spacing.md}px;
   padding-top: ${({ theme }) => theme.spacing.sm}px;
   padding-bottom: ${({ theme }) => theme.spacing.sm}px;
+  margin-left: ${({ theme }) => -theme.spacing.sm}px;
 
   ${({ theme, $color, $status }) => {
     if ($status) {

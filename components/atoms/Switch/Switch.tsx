@@ -72,7 +72,7 @@ export const Switch: React.FC<SwitchProps> = ({
   return (
     <SwitchContainer disabled={disabled} onPress={toggleSwitch} $labelPosition={labelPosition}>
       {label && labelPosition === 'left' && (
-        <Label $disabled={disabled} $position="left">
+        <Label variant="caption" weight="bold" $disabled={disabled} $position="left">
           {label}
         </Label>
       )}
@@ -103,6 +103,7 @@ const SwitchContainer = styled.Pressable<ContainerProps & { theme: AppTheme }>`
   flex-direction: row;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm}px;
+  margin-right: ${({ theme }) => theme.spacing.sm}px;
 `
 
 interface TrackProps {

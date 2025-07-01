@@ -35,6 +35,7 @@ export interface FlightStatus {
   outGate?: OutGate
   legType: string
   totalFlightTimeInMinutes: number
+  isFavorite?: boolean
 }
 
 export type FlightStatusCollection = FlightStatus[]
@@ -55,4 +56,12 @@ export type AirportCities = Record<string, AirportCity>
 
 export interface AirportCitiesData {
   airportCities: AirportCities
+}
+
+export interface SearchParams {
+  criteria?: 'single' | 'multiple'
+  flightNumber?: string
+  flightDate?: string
+  origin?: string
+  destination?: string
 }

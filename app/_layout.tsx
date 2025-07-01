@@ -44,6 +44,8 @@ export default function RootLayout() {
 function AppContent({ rs }: { rs: (value: number, type?: 'width' | 'height' | 'font') => number }) {
   const { themeMode, theme } = useThemeContext()
 
+  queryClient.setQueryData(['flightFavorites'], [])
+
   const appTheme: AppTheme = useMemo(() => {
     const baseTheme = {
       ...theme,
