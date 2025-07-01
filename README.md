@@ -1,55 +1,157 @@
-# Welcome to your Expo app 👋
+# 🚀 AMX 2.1
 
-This is an [Expo](https://expo.dev) project created with
-[`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil desarrollada con **React Native** y **Expo**, enfocada en ofrecer una arquitectura
+escalable, modular y con enfoque profesional para facilitar su mantenimiento y evolución. El
+proyecto implementa patrones modernos, diseño atómico y herramientas actuales del ecosistema
+frontend.
 
-## Get started
+---
 
-1. Install dependencies
+## Preview
 
-   ```bash
-   npm install
-   ```
+| #  | Descripción                               | Video                                                                 |
+|----|-------------------------------------------|------------------------------------------------------------------------|
+| 1  | Cambio de tema (Light/Dark)               | ![video](https://github.com/user-attachments/assets/f15777ab-5b8e-4a14-8aba-9d273565d6ca) |
+| 2  | Búsqueda por destino y origen             | ![video](ruta/video2.gif) |
+| 3  | Búsqueda por número de vuelo              | ![video]([ruta/video3.gif](https://github.com/user-attachments/assets/c0156699-2244-478f-b60f-8f0b3d637f4e)) |
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 📐 Arquitectura
 
-In the output, you'll find options to open the app in a
+Este proyecto adopta una estructura basada en **MVVM (Model-View-ViewModel)**, donde:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **Model**: lógica de negocio desacoplada en hooks y servicios.
+- **View**: componentes atómicos y pantallas (screens).
+- **ViewModel**: lógica intermedia y manejo de estado mediante `contexts/` y `hooks/`.
 
-You can start developing by editing the files inside the **app** directory. This project uses
-[file-based routing](https://docs.expo.dev/router/introduction).
+### 🧩 Patrones de diseño implementados
 
-## Get a fresh project
+- **🔁 Patrón Observer** – React y sus hooks permiten actualizar automáticamente la UI cuando cambia
+  el estado.
+- **🧱 Diseño atómico (Atomic Design)** – Separación de componentes en `atoms`, `molecules` y
+  `organisms` para mayor reutilización y mantenimiento.
+- **📦 Repository Pattern + Cache Layer** – Uso de `React Query` y `services/` para separar la
+  lógica de datos de la presentación, permitiendo control de caché, reintentos y estados de error.
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## 🧰 Tecnologías y herramientas
+
+| Herramienta              | Uso                                                     |
+| ------------------------ | ------------------------------------------------------- |
+| **Expo**                 | Plataforma para desarrollo, compilación y testing       |
+| **Styled Components**    | Estilos encapsulados en componentes                     |
+| **React Context API**    | Estado global (sesión, UI, etc.)                        |
+| **React Query**          | Manejo de datos remotos con caché, sincronización y más |
+| **React Navigation**     | Navegación stack/tab entre pantallas                    |
+| **Hooks personalizados** | Reutilización de lógica de negocio e interacciones      |
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+amx-2.1/
+├── app/                        # Navegación basada en Expo Router (estructura de rutas)
+├── assets/                     # Recursos estáticos (imágenes, íconos, fuentes)
+├── components/
+│   ├── atoms/                  # Elementos básicos de UI
+│   ├── molecules/              # Composición de 2+ átomos
+│   ├── organisms/              # Componentes complejos
+│   └── templates/              # Estructuras de pantalla base
+├── constants/                  # Constantes compartidas (colores, textos, etc.)
+├── contexts/                   # Manejadores globales de estado (Session, Theme, UI)
+├── helpers/                    # Funciones utilitarias (validaciones, formatos, etc.)
+├── hooks/                      # Hooks reutilizables para negocio y lógica de UI
+├── services/                   # Funciones que conectan con APIs
+├── theme/                      # Estilos generales y configuración de tema
+├── types/                      # Tipos TypeScript centralizados
+├── .eslintrc.js                # Configuración de linting
+├── app.config.ts               # Configuración de Expo
+├── package.json                # Dependencias y scripts
+└── README.md                   # Este documento
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app**
-directory where you can start developing.
+---
 
-## Learn more
+## 📦 Instalación
 
-To learn more about developing your project with Expo, look at the following resources:
+Requisitos:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with
-  our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step
-  tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Node.js >= 18
+- Yarn
+- Expo CLI (`npm install -g expo-cli`)
 
-## Join the community
+```bash
+# Clonar el repositorio
+git clone https://github.com/Eduardoleor/amx-2.1.git
+cd amx-2.1
 
-Join our community of developers creating universal apps.
+# Instalar dependencias
+yarn install
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Iniciar la app en modo desarrollo
+yarn start
+
+# Lanzar la app en Android
+yarn android
+
+# Lanzar la app en iOS
+yarn ios
+```
+
+---
+
+## 🔧 Scripts disponibles
+
+```bash
+yarn start       # Inicia el servidor de desarrollo (expo start)
+yarn lint        # Ejecuta el linter
+yarn build       # Construye la app (usando EAS si está configurado)
+```
+
+---
+
+## 🔐 Manejo de estado
+
+La app no utiliza Redux. En su lugar, emplea:
+
+- `contexts/` para manejar sesión, tema y otras configuraciones globales.
+- `React Query` para sincronizar datos remotos con la UI.
+- `hooks/` personalizados para encapsular lógica específica.
+
+---
+
+## 🌐 Navegación
+
+La app utiliza **Expo Router**, un sistema de enrutamiento basado en el filesystem. Cada archivo
+dentro de `app/` representa una ruta (screen).
+
+Ejemplo:
+
+```
+app/
+├── index.tsx          # Pantalla principal
+├── login.tsx          # Pantalla de login
+└── profile/
+    └── index.tsx      # Ruta: /profile
+```
+
+---
+
+## 📌 Convenciones de diseño
+
+- **Estilos**: Se implementan con `styled-components`, respetando el sistema de diseño definido en
+  `theme/`.
+- **Componentes**: Nombrados y estructurados siguiendo Atomic Design.
+- **Validaciones**: Centralizadas en `helpers/validators.ts` (ej. correos, contraseñas, etc.).
+- **Gestión de sesión**: `contexts/session.context.tsx` maneja login/logout y tokens.
+
+---
+
+## 📄 Licencia
+
+MIT © [Eduardo Leal](https://github.com/Eduardoleor)
+
+---
