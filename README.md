@@ -6,14 +6,12 @@ proyecto implementa patrones modernos, diseño atómico y herramientas actuales 
 frontend.
 
 ---
-
 ## Preview
-
-| #  | Descripción                               | Video                                                                 |
-|----|-------------------------------------------|------------------------------------------------------------------------|
-| 1  | Cambio de tema (Light/Dark)               | ![video](https://github.com/user-attachments/assets/f15777ab-5b8e-4a14-8aba-9d273565d6ca) |
-| 2  | Búsqueda por destino y origen             | ![video](ruta/video2.gif) |
-| 3  | Búsqueda por número de vuelo              | ![video]([ruta/video3.gif](https://github.com/user-attachments/assets/c0156699-2244-478f-b60f-8f0b3d637f4e)) |
+| #  | Descripción                          | Video                                                                   |
+|----|--------------------------------------|--------------------------------------------------------------------------|
+| 1  | Cambio de tema (Light/Dark)          | [▶️ Ver video](https://github.com/user-attachments/assets/f15777ab-5b8e-4a14-8aba-9d273565d6ca) |
+| 2  | Búsqueda por destino y origen        | [▶️ Ver video](https://github.com/user-attachments/assets/c0156699-2244-478f-b60f-8f0b3d637f4e) |
+| 3  | Búsqueda por número de vuelo         | [▶️ Ver video](https://github.com/user-attachments/assets/a8795906-f480-43df-9484-c4d4a5b03e25) |
 
 ---
 
