@@ -5,6 +5,8 @@ escalable, modular y con enfoque profesional para facilitar su mantenimiento y e
 proyecto implementa patrones modernos, diseño atómico y herramientas actuales del ecosistema
 frontend.
 
+Documentación: https://deepwiki.com/Eduardoleor/amx-2.1/1-overview
+
 ---
 ## Preview
 | #  | Descripción                          | Video                                                                   |
